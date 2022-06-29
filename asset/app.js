@@ -112,8 +112,8 @@ $(function () {
 						// 	return console.log(`Your point is: ${temp2}`);
 						// }
 						console.log(`Your score is: ${point}`);
+						alert(`You win! Your score is: ${point}`);
 						gameOver();
-						return alert(`You win! Your score is: ${point}`);
 					}
 				}
 			}
@@ -389,8 +389,9 @@ $(function () {
 	});
 	//main
 	function gameStart() {
-		if (difi == "baby") timeStart = new Date();
-		else timeStart = parseInt(new Date().getTime());
+		// if (difi == "baby") timeStart = new Date();
+		// else
+		timeStart = parseInt(new Date().getTime());
 		setintervalTemp = setInterval(returnPoint, 1000);
 	}
 	function gameOver() {
@@ -402,8 +403,28 @@ $(function () {
 		var d = parseInt(new Date().getTime());
 		point = d - timeStart;
 		console.log(point);
+		devide();
 		$("#test")
 			.empty()
 			.append(parseInt(point / 1000));
+	}
+	//tách point ra để hiển thị thành 3 thành phần
+	var hundred;
+	var decimal;
+	var unit;
+
+	function devide() {
+		hundred = 0;
+		decimal = 0;
+		unit = 0;
+		point = parseInt(point / 1000);
+
+		unit = point % 10;
+		decimal = ((point % 100) - unit) / 10;
+		hundred = (point - decimal - unit) / 100;
+
+		$("#hundred").addClass(`clock-num-${hundred}`);
+		$("#decimal").addClass(`clock-num-${decimal}`);
+		$("#unit").addClass(`clock-num-${unit}`);
 	}
 });
