@@ -48,6 +48,7 @@ $(function () {
 		//khi click vào 1 ô ngẫu nhiên
 		$(".tile").mousedown(function (e) {
 			var temp = $(this).attr("id"); //lấy id của ô được nhấn
+			console.log(status);
 			//tính giờ nếu đây là lần đầu tiên 1 ô đc nhấn
 			if (firstClick) {
 				gameStart();
@@ -61,61 +62,64 @@ $(function () {
 				devide();
 				loadPage();
 			}
-			if (status != "win") {
-				//chuột phải đặt cờ
-				var temp1 = new Date();
-				var temp2 = temp1 - timeStart;
-				if (e.which === 3) {
-					e.preventDefault();
-					if ($(this).hasClass("hidden") && flagNum < bombNum) {
-						$(this).removeClass("hidden");
-						$(this).addClass("flag");
-						flagList.push(temp);
-						flagNum++;
-					} else if ($(this).hasClass("flag")) {
-						$(this).removeClass("flag");
-						$(this).addClass("hidden");
-						flagList.splice(flagList.indexOf(temp), 1);
-						flagNum--;
-					}
-					flagRemain = bombNum - flagNum;
-					$("#flagremain").empty();
-					$("#flagremain").append(`Flags: ${flagRemain}`);
-					flagList.sort(function (a, b) {
-						return a - b;
-					});
+			//chuột phải đặt cờ
+			if (e.which === 3) {
+				e.preventDefault();
+				if ($(this).hasClass("hidden") && flagNum < bombNum) {
+					$(this).removeClass("hidden");
+					$(this).addClass("flag");
+					flagList.push(temp);
+					flagNum++;
+				} else if ($(this).hasClass("flag")) {
+					$(this).removeClass("flag");
+					$(this).addClass("hidden");
+					flagList.splice(flagList.indexOf(temp), 1);
+					flagNum--;
 				}
-				//chuột trái mở ô
-				else if (e.which === 1 && !$(this).hasClass("flag")) {
-					if (isMine(temp) && status != "lose") {
-						//chuyển class
-						$(this).removeClass("hidden");
-						$(this).addClass("mine");
-						// ko nhớ nhét vào đây làm gì, test sơ qua có vẻ k quan trọng
-						// flagList.splice(flagList.indexOf(temp), 1);
-						// flagNum--;
-						$("#bombremain").empty();
-						$("#bombremain").append(`Bombs remain: ${bombNum - 1}`);
-						revealAll();
-						status = "lose";
-						gameOver();
-						console.log("You lose!");
-						return alert(`Game over!`);
-					} else reveal(temp);
+				flagRemain = bombNum - flagNum;
+				$("#flagremain").empty();
+				$("#flagremain").append(`Flags: ${flagRemain}`);
+				flagList.sort(function (a, b) {
+					return a - b;
+				});
+			}
+			//chuột trái mở ô
+			else if (e.which === 1) {
+				if (status == "win" || status == "lose") {
+					firstClick = 1;
+					gameOver();
+					status = "ongoing";
+					devide();
+					return loadPage();
 				}
+				if (isMine(temp) && status != "lose" && !$(this).hasClass("flag")) {
+					//chuyển class
+					$(this).removeClass("hidden");
+					$(this).addClass("mine");
+					// ko nhớ nhét vào đây làm gì, test sơ qua có vẻ k quan trọng
+					// flagList.splice(flagList.indexOf(temp), 1);
+					// flagNum--;
+					$("#bombremain").empty();
+					$("#bombremain").append(`Bombs remain: ${bombNum - 1}`);
+					revealAll();
+					status = "lose";
+					gameOver();
+					console.log("You lose!");
+					return alert(`Game over!`);
+				} else reveal(temp);
+			}
 
-				if (isEqual(flagList, bombList)) {
-					if (!$(".tile").hasClass("hidden")) {
-						status = "win";
-						returnPoint();
-						// if (difi == "baby") {
-						// 	console.log("alo");
-						// 	return console.log(`Your point is: ${temp2}`);
-						// }
-						console.log(`Your time is: ${point}`);
-						alert(`You win! Your time is: ${point}`);
-						gameOver();
-					}
+			if (isEqual(flagList, bombList)) {
+				if (!$(".tile").hasClass("hidden")) {
+					status = "win";
+					returnPoint();
+					// if (difi == "baby") {
+					// 	console.log("alo");
+					// 	return console.log(`Your point is: ${temp2}`);
+					// }
+					console.log(`Your time is: ${point}`);
+					alert(`You win! Your time is: ${point}`);
+					gameOver();
 				}
 			}
 		});
@@ -131,8 +135,6 @@ $(function () {
 			function () {
 				// out
 				// $(this).removeClass("yellow");
-				// $(this).addClass("hidden");
-				// console.log($(this).attr("class"));
 			}
 		);
 	}
@@ -381,33 +383,19 @@ $(function () {
 	}
 
 	//hàm tính highscore dựa theo thời gian chơi
-	//test
-	$(".blank").click(function () {
-		gameStart();
-	});
-	$(".non-blank").click(function () {
-		gameOver();
-	});
-	//main
 	function gameStart() {
-		// if (difi == "baby") timeStart = new Date();
-		// else
 		timeStart = parseInt(new Date().getTime());
 		setintervalTemp = setInterval(returnPoint, 1000);
 	}
 	function gameOver() {
 		clearInterval(setintervalTemp);
 		timeStart = 0;
-		// $("#test").empty().append("0");
 	}
 	function returnPoint() {
 		var d = parseInt(new Date().getTime());
 		point = d - timeStart;
 		if (status == "win") console.log(`Real score: ${point}`);
 		devide();
-		// $("#test")
-		// 	.empty()
-		// 	.append(parseInt(point / 1000));
 	}
 	//tách point ra để hiển thị thành 3 thành phần
 	var hundred;
@@ -422,9 +410,7 @@ $(function () {
 
 		unit = point % 10;
 		decimal = ((point % 100) - unit) / 10;
-		// hundred = (point - decimal - unit) / 100;
 		hundred = (point - (point % 100)) / 100;
-		// console.log(`Point: ${hundred}${decimal}${unit}`);
 		$("#hundred")
 			.removeAttr("class")
 			.addClass(`clock-num-${hundred} clock-style`);
@@ -434,5 +420,3 @@ $(function () {
 		$("#unit").removeAttr("class").addClass(`clock-num-${unit} clock-style`);
 	}
 });
-
-$(selector).removeAttr("class");
