@@ -48,7 +48,6 @@ $(function () {
 		//khi click vào 1 ô ngẫu nhiên
 		$(".tile").mousedown(function (e) {
 			var temp = $(this).attr("id"); //lấy id của ô được nhấn
-			console.log(status);
 			//tính giờ nếu đây là lần đầu tiên 1 ô đc nhấn
 			if (firstClick) {
 				gameStart();
@@ -96,13 +95,9 @@ $(function () {
 					//chuyển class
 					$(this).removeClass("hidden");
 					$(this).addClass("mine");
-					// ko nhớ nhét vào đây làm gì, test sơ qua có vẻ k quan trọng
-					// flagList.splice(flagList.indexOf(temp), 1);
-					// flagNum--;
-					$("#bombremain").empty();
-					$("#bombremain").append(`Bombs remain: ${bombNum - 1}`);
-					revealAll();
+
 					status = "lose";
+					revealAll();
 					gameOver();
 					console.log("You lose!");
 					return alert(`Game over!`);
@@ -117,7 +112,6 @@ $(function () {
 					// 	console.log("alo");
 					// 	return console.log(`Your point is: ${temp2}`);
 					// }
-					console.log(`Your time is: ${point}`);
 					alert(`You win! Your time is: ${point}`);
 					gameOver();
 				}
@@ -390,10 +384,18 @@ $(function () {
 	function gameOver() {
 		clearInterval(setintervalTemp);
 		timeStart = 0;
+		point = 0;
 	}
 	function returnPoint() {
 		var d = parseInt(new Date().getTime());
 		point = d - timeStart;
+		if (point >= 999000) {
+			status = "lose";
+			revealAll();
+			gameOver();
+			console.log("You lose!");
+			return alert(`Game over!`);
+		}
 		if (status == "win") console.log(`Real score: ${point}`);
 		devide();
 	}

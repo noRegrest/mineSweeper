@@ -40,10 +40,11 @@ line-height: 103.75%;
 /* or 19px */
 letter-spacing: 0.035em;
 color: #585656;
-
 display: flex;
 justify-content: space-around;
-
+}
+.tuto-text{
+    padding: 1px 11px;
 }
 .wrapper{
     width: fit-content;
