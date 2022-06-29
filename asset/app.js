@@ -8,6 +8,12 @@ $(function () {
 	let bombList = []; //mảng lưu vị trí bom
 	var flagList = []; //mảng lưu vị trí flag
 	var flagRemain; //số cờ còn lại
+	var status;
+	var firstClick = 1; //biến để check lần đầu bấm vào map => lấy timeStart
+	//var tính highscore
+	var timeStart = 0;
+	var setintervalTemp;
+	var point = 0;
 
 	loadPage();
 
@@ -26,6 +32,7 @@ $(function () {
 		loadPage();
 	});
 
+	console.log(point);
 	function loadPage() {
 		mode();
 		makeBombs();
@@ -36,49 +43,66 @@ $(function () {
 		// console.log(`${flagRemain}`);
 
 		$(".tile").mousedown(function (e) {
+			if (firstClick) {
+				gameStart();
+				firstClick = 0;
+			}
 			var temp = $(this).attr("id");
 			if (e.which === 2) {
-				alert("Restart!");
+				// alert("Restart!");
+				firstClick = 1;
+				gameOver();
+				status = "ongoing";
 				loadPage();
 			}
-			if (e.which === 3) {
-				e.preventDefault();
-				if ($(this).hasClass("hidden") && flagNum < bombNum) {
-					$(this).removeClass("hidden");
-					$(this).addClass("flag");
-					flagList.push(temp);
-					flagNum++;
-				} else if ($(this).hasClass("flag")) {
-					$(this).removeClass("flag");
-					$(this).addClass("hidden");
-					flagList.splice(flagList.indexOf(temp), 1);
-					flagNum--;
+			if (status != "win") {
+				if (e.which === 3) {
+					e.preventDefault();
+					if ($(this).hasClass("hidden") && flagNum < bombNum) {
+						$(this).removeClass("hidden");
+						$(this).addClass("flag");
+						flagList.push(temp);
+						flagNum++;
+					} else if ($(this).hasClass("flag")) {
+						$(this).removeClass("flag");
+						$(this).addClass("hidden");
+						flagList.splice(flagList.indexOf(temp), 1);
+						flagNum--;
+					}
+					flagRemain = bombNum - flagNum;
+					$("#flagremain").empty();
+					$("#flagremain").append(`Flags: ${flagRemain}`);
+					flagList.sort(function (a, b) {
+						return a - b;
+					});
+				} else if (e.which === 1 && !$(this).hasClass("flag")) {
+					if (
+						isMine(temp) &&
+						!$(this).hasClass("active") &&
+						!$(this).hasClass("mine")
+					) {
+						$(this).removeClass("hidden");
+						$(this).addClass("mine");
+						flagList.splice(flagList.indexOf(temp), 1);
+						flagNum--;
+						$("#bombremain").empty();
+						$("#bombremain").append(`Bombs remain: ${bombNum - 1}`);
+						revealAll();
+						status = "lose";
+						gameOver();
+						console.log("You lose");
+						return alert(`Game over!`);
+					} else reveal(temp);
 				}
-				flagRemain = bombNum - flagNum;
-				$("#flagremain").empty();
-				$("#flagremain").append(`Flags: ${flagRemain}`);
-				flagList.sort(function (a, b) {
-					return a - b;
-				});
-			} else if (e.which === 1 && !$(this).hasClass("flag")) {
-				if (
-					isMine(temp) &&
-					!$(this).hasClass("active") &&
-					!$(this).hasClass("mine")
-				) {
-					$(this).removeClass("hidden");
-					$(this).addClass("mine");
-					flagList.splice(flagList.indexOf(temp), 1);
-					flagNum--;
-					$("#bombremain").empty();
-					$("#bombremain").append(`Bombs remain: ${bombNum - 1}`);
-					revealAll();
-					alert(`Game over!`);
-				} else reveal(temp);
-			}
 
-			if (isEqual(flagList, bombList)) {
-				if (!$(".tile").hasClass("hidden")) return alert("You win!");
+				if (isEqual(flagList, bombList)) {
+					if (!$(".tile").hasClass("hidden")) {
+						status = "win";
+						gameOver();
+						console.log(`Your score is: ${point}`);
+						return alert(`You win! Your score is: ${point}`);
+					}
+				}
 			}
 		});
 
@@ -335,7 +359,7 @@ $(function () {
 		for (let i = 0; i < n * n; i++) {
 			map.push("0");
 		}
-		//set trị số map = 10
+		//set trị số filter = 10
 		for (let i = 0; i < n * n; i++) {
 			filter.push("10");
 		}
@@ -343,5 +367,30 @@ $(function () {
 		var wid = n * 32 - -8;
 		$("#box-table").css("width", `${wid}`);
 		$("#tuto").css("width", `${wid}`);
+	}
+
+	//hàm tính highscore dựa theo thời gian chơi
+	//test
+	$(".blank").click(function () {
+		gameStart();
+	});
+	$(".non-blank").click(function () {
+		gameOver();
+	});
+	//main
+	function gameStart() {
+		timeStart = parseInt(new Date().getTime() / 1000);
+		setintervalTemp = setInterval(returnPoint, 1000);
+	}
+	function gameOver() {
+		clearInterval(setintervalTemp);
+		timeStart = 0;
+		$("#test").empty().append("0");
+	}
+	function returnPoint() {
+		const d = parseInt(new Date().getTime() / 1000);
+		point = d - timeStart;
+		console.log(point);
+		$("#test").empty().append(point);
 	}
 });

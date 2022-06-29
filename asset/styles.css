@@ -142,3 +142,14 @@ background-image: url('/asset/img/Property\ 1=Clicked.png');
     background-position: center;
     background-size: contain;
 }
+
+
+/* test */
+
+.blank{
+    background-color: aqua;
+
+}
+.non-blank{
+    background-color: yellow;
+}
