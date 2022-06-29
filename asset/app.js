@@ -31,7 +31,9 @@ $(function () {
 	//chuyển mode
 	$("#mode").on("change", function (event) {
 		gameOver();
+		// status = "lose";
 		firstClick = 1;
+		devide();
 		loadPage();
 	});
 
