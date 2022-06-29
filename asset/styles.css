@@ -1,0 +1,144 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    margin: 1rem 0;
+}
+@font-face {
+    font-family: myFirstFont;
+    src: url(sansation_light.woff);
+}
+#box-table,
+#tuto{
+    border-spacing: 0;
+    border-top: solid #878787  4px;
+    border-left:solid #878787 4px;
+    border-right: solid #FFFFFF 4px;
+    border-bottom:solid #FFFFFF 4px;
+    margin-bottom: 1rem;
+}
+#start,#reset{
+    display: none;
+}
+#play-ground{
+    background-color: #3C3C3C;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+#tuto{
+min-height: 3rem;    
+left: 26px;
+top: 16px;
+padding: 7px;
+font-family: 'ArcadeClassic';
+font-style: normal;
+font-weight: 400;
+font-size: 1rem;
+line-height: 103.75%;
+/* or 19px */
+letter-spacing: 0.035em;
+color: #585656;
+
+display: flex;
+justify-content: space-around;
+
+}
+.wrapper{
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: fit-content;
+    background-color: #BFBFBF;
+    padding: 2rem 2rem 1.5rem;
+    margin: auto;
+    border-spacing: 0;
+    border-top: solid #FFFFFF  4px;
+    border-left:solid #FFFFFF 4px;
+    border-right: solid #878787 4px;
+    border-bottom:solid #878787 4px;
+    margin-bottom: 1rem;
+}
+.tile{
+    width: 32px;
+    height: 32px;
+    background-image: url(./img/Property\ 1=Default.png);
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.clicked{
+background-image: url('/asset/img/Property\ 1=Clicked.png');
+}
+
+.click-down{
+    background-image: url('/asset/img/Property\ 1=Click\ down.png');
+
+}
+
+.hover{
+    background-image: url('/asset/img/Property\ 1=Hover.png');
+
+}
+
+.flag{
+    /* background-color: red; */
+    background-image: url('/asset/img/Property\ 1=Flag.png');
+    z-index: 9099!important;
+}
+
+
+
+.overlay-mine{
+    background-image: url('/asset/img/Overlay\ Mine.png');
+
+}
+
+.mine{
+    background-image: url('/asset/img/Mine.png');
+
+}
+
+
+.num-8{background-image: url('/asset/img/8.png');}
+
+.num-7{background-image: url('/asset/img/7.png');}
+
+.num-6{background-image: url('/asset/img/6.png');}
+
+.num-5{background-image: url('/asset/img/5.png');}
+
+.num-4{background-image: url('/asset/img/4.png');}
+
+.num-3{background-image: url('/asset/img/3.png');}
+
+.num-2{background-image: url('/asset/img/2.png');}
+
+.num-1{
+    background-image: url('/asset/img/1.png');
+}
+
+.smaller{background-size: 100px!important;}
+/* .num-0{background-image: url('/asset/img/0.png');} */
+
+.num-0{
+    /* background-color:#BFBFBF;
+    height:32px;
+    width: 32px; */
+    background-image: url('/asset/img/Property\ 1=Click\ down.png');
+}
+
+.border-num{
+    height: 32px;
+    width: 32px;
+    border-top: 2px solid #818181;
+    border-left: 2px solid #818181;
+    padding: 0;
+    margin: 0;
+    background-position: center;
+    background-size: contain;
+}

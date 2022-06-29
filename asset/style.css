@@ -1,0 +1,96 @@
+*{
+    margin:0;
+    padding:0;
+    /* border: solid black 1px; */
+    /* background-color: black; */
+    /* color:white;  */
+}
+#play-ground{
+    margin-bottom: 3rem;
+}
+
+#game{
+    display: flex;
+    margin-top: 3rem;
+    justify-content: center;
+}
+
+#game div{
+    border: solid rgba(0, 0, 0, 0.518) 2px;
+}
+/* .wrapper:hover{
+    cursor: pointer!important;
+} */
+.tile{
+    border: solid black 1px;
+    padding: 17px 17px;
+    width: 3rem!important;
+    height:3rem!important;
+    text-align: center;
+    margin: 2px 2px;
+    border-radius: 5px;
+}
+#box-table,.wrapper{
+    border-radius: 5px;
+}
+.mine{
+    background-color:red;
+}
+
+/* color */
+
+.zero{
+    background-color: aquamarine;
+}
+.light-yellow{
+    background-color: #daf66c;
+}
+
+.medium-yellow{
+    background-color: rgb(161, 161, 50);
+}
+.yellow{
+    background-color: bisque;
+}
+.orange{
+    background-color: orange;
+}
+.black{
+    background-color: black;
+}
+/* 
+.tile:hover{
+    color:white
+} */
+
+.number{
+    padding: 0!important;
+    margin:0!important;
+}
+/* button:hover,
+#box-table:hover,
+td:hover{
+    cursor: pointer;
+} */
+
+.test{
+    color: violet;
+}
+.hidden{
+    background-color: white;
+}
+.flag{
+    background-color: black;
+}
+
+/* (1) FF0000 Red, 
+(2) FF3300 Red(Orange)
+(3) ff6600 
+(4) ff9900 
+(5) FFCC00 Gold 
+(6) FFFF00 Yellow
+(7) ccff00
+(8) 99ff00
+(9) 66ff00
+(10) 33ff00
+(11) 00FF00 Lime  */
