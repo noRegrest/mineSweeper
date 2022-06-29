@@ -22,18 +22,18 @@ $(function () {
 		if (code === "KeyR") loadPage();
 	});
 
-	$("#dif").on("change", function (event) {
+	$("#mode").on("change", function (event) {
 		loadPage();
 	});
 
 	function loadPage() {
-		dif();
+		mode();
 		makeBombs();
 		reachable();
 		render(filter);
 		$("#flagremain").empty();
 		$("#flagremain").append(`Flags: ${flagRemain}`);
-		console.log(`${flagRemain}`);
+		// console.log(`${flagRemain}`);
 
 		$(".tile").mousedown(function (e) {
 			var temp = $(this).attr("id");
@@ -70,7 +70,6 @@ $(function () {
 					$(this).addClass("mine");
 					flagList.splice(flagList.indexOf(temp), 1);
 					flagNum--;
-					console.log(bombList);
 					$("#bombremain").empty();
 					$("#bombremain").append(`Bombs remain: ${bombNum - 1}`);
 					revealAll();
@@ -102,13 +101,16 @@ $(function () {
 	//lật tất cả ô
 	function revealAll() {
 		for (let index = 0; index < map.length; index++) {
-			$(`#${index}`).removeClass("flag");
+			// $(`#${index}`).removeClass("flag");
 			if (map[index] == 9) {
 				if (!$(`#${index}`).hasClass("mine")) {
-					$(`#${index}`).removeClass("hidden");
-					$(`#${index}`).addClass("overlay-mine active");
+					if (!$(`#${index}`).hasClass("flag")) {
+						$(`#${index}`).removeClass("hidden");
+						$(`#${index}`).addClass("overlay-mine active");
+					}
 				}
 			} else $(`#${index}`).addClass(`num-${map[index]}`);
+			//add class border cho css
 			if (
 				!$(`#${index}`).hasClass("border-num") &&
 				!$(`#${index}`).hasClass("overlay-mine") &&
@@ -138,7 +140,7 @@ $(function () {
 			return a - b;
 		});
 		console.log(`bomb: ${bombList}`);
-		console.log(`${bombList.length}`);
+		// console.log(`${bombList.length}`);
 	}
 
 	//random trong khoảng cho trước
@@ -222,10 +224,8 @@ $(function () {
 		$("#box-table").empty();
 		var filterClass = "";
 		if (array == map) {
-			console.log("[map]");
 		}
 		if (array == filter) {
-			console.log("[filter]");
 			filterClass = "hidden";
 		}
 
@@ -309,8 +309,8 @@ $(function () {
 	}
 
 	//chọn độ khó, set trị số ban đầu của các ô trong map là 0
-	function dif() {
-		difi = $("#dif").val();
+	function mode() {
+		difi = $("#mode").val();
 		switch (difi) {
 			case "baby":
 				n = 5;
