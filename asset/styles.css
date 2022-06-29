@@ -22,8 +22,8 @@ body{
 }
 #play-ground{
     background-color: #3C3C3C;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    /* margin-top: 2rem; */
+    margin-bottom: 1rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
@@ -53,7 +53,7 @@ justify-content: space-around;
     align-items: center;
     height: fit-content;
     background-color: #BFBFBF;
-    padding: 2rem 2rem 1.5rem;
+    padding: 0.5rem 1rem 0.5rem;
     margin: auto;
     border-spacing: 0;
     border-top: solid #FFFFFF  4px;
@@ -121,7 +121,10 @@ background-image: url('/asset/img/Property\ 1=Clicked.png');
 .num-1{
     background-image: url('/asset/img/1.png');
 }
-
+.clock-style{
+    height: 42px;
+    width: 22px;
+}
 .clock-num-0{background-image: url('/asset/img/Property\ 1=0.png');}
 .clock-num-1{background-image: url('/asset/img/Property\ 1=1.png');}
 .clock-num-2{background-image: url('/asset/img/Property\ 1=2.png');}
@@ -157,7 +160,19 @@ background-image: url('/asset/img/Property\ 1=Clicked.png');
 
 
 /* test */
-
+#test{
+    margin-top: 0.25rem;
+    display: flex;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 2px;
+}
+#test div{
+    margin-left: 2px;
+}
+.black{
+    background-color: black;
+}
 .blank{
     background-color: aqua;
 
@@ -165,3 +180,6 @@ background-image: url('/asset/img/Property\ 1=Clicked.png');
 .non-blank{
     background-color: yellow;
 }
+/* #loadIMG{
+    display: none;
+} */

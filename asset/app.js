@@ -35,7 +35,7 @@ $(function () {
 		loadPage();
 	});
 
-	console.log(point);
+	// console.log(point);
 
 	function loadPage() {
 		mode();
@@ -58,6 +58,7 @@ $(function () {
 				firstClick = 1;
 				gameOver();
 				status = "ongoing";
+				devide();
 				loadPage();
 			}
 			if (status != "win") {
@@ -111,8 +112,8 @@ $(function () {
 						// 	console.log("alo");
 						// 	return console.log(`Your point is: ${temp2}`);
 						// }
-						console.log(`Your score is: ${point}`);
-						alert(`You win! Your score is: ${point}`);
+						console.log(`Your time is: ${point}`);
+						alert(`You win! Your time is: ${point}`);
 						gameOver();
 					}
 				}
@@ -351,10 +352,10 @@ $(function () {
 				bombNum = 3;
 				break;
 			case "easy":
-				n = 3;
-				bombNum = 1;
-				// n = 10;
-				// bombNum = 11;
+				// n = 3;
+				// bombNum = 1;
+				n = 10;
+				bombNum = 11;
 				break;
 			case "medium":
 				n = 17;
@@ -397,16 +398,16 @@ $(function () {
 	function gameOver() {
 		clearInterval(setintervalTemp);
 		timeStart = 0;
-		$("#test").empty().append("0");
+		// $("#test").empty().append("0");
 	}
 	function returnPoint() {
 		var d = parseInt(new Date().getTime());
 		point = d - timeStart;
-		console.log(point);
+		if (status == "win") console.log(`Real score: ${point}`);
 		devide();
-		$("#test")
-			.empty()
-			.append(parseInt(point / 1000));
+		// $("#test")
+		// 	.empty()
+		// 	.append(parseInt(point / 1000));
 	}
 	//tách point ra để hiển thị thành 3 thành phần
 	var hundred;
@@ -421,10 +422,17 @@ $(function () {
 
 		unit = point % 10;
 		decimal = ((point % 100) - unit) / 10;
-		hundred = (point - decimal - unit) / 100;
-
-		$("#hundred").addClass(`clock-num-${hundred}`);
-		$("#decimal").addClass(`clock-num-${decimal}`);
-		$("#unit").addClass(`clock-num-${unit}`);
+		// hundred = (point - decimal - unit) / 100;
+		hundred = (point - (point % 100)) / 100;
+		// console.log(`Point: ${hundred}${decimal}${unit}`);
+		$("#hundred")
+			.removeAttr("class")
+			.addClass(`clock-num-${hundred} clock-style`);
+		$("#decimal")
+			.removeAttr("class")
+			.addClass(`clock-num-${decimal} clock-style`);
+		$("#unit").removeAttr("class").addClass(`clock-num-${unit} clock-style`);
 	}
 });
+
+$(selector).removeAttr("class");
