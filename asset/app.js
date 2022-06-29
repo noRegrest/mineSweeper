@@ -28,34 +28,42 @@ $(function () {
 		if (code === "KeyR") loadPage();
 	});
 
+	//chuyển mode
 	$("#mode").on("change", function (event) {
+		gameOver();
+		firstClick = 1;
 		loadPage();
 	});
 
 	console.log(point);
+
 	function loadPage() {
 		mode();
 		makeBombs();
 		reachable();
 		render(filter);
+		//số cờ hiện có
 		$("#flagremain").empty();
 		$("#flagremain").append(`Flags: ${flagRemain}`);
-		// console.log(`${flagRemain}`);
-
+		//khi click vào 1 ô ngẫu nhiên
 		$(".tile").mousedown(function (e) {
+			var temp = $(this).attr("id"); //lấy id của ô được nhấn
+			//tính giờ nếu đây là lần đầu tiên 1 ô đc nhấn
 			if (firstClick) {
 				gameStart();
 				firstClick = 0;
 			}
-			var temp = $(this).attr("id");
+			//restart nếu nhấn bằng chuột giữa
 			if (e.which === 2) {
-				// alert("Restart!");
 				firstClick = 1;
 				gameOver();
 				status = "ongoing";
 				loadPage();
 			}
 			if (status != "win") {
+				//chuột phải đặt cờ
+				var temp1 = new Date();
+				var temp2 = temp1 - timeStart;
 				if (e.which === 3) {
 					e.preventDefault();
 					if ($(this).hasClass("hidden") && flagNum < bombNum) {
@@ -75,22 +83,22 @@ $(function () {
 					flagList.sort(function (a, b) {
 						return a - b;
 					});
-				} else if (e.which === 1 && !$(this).hasClass("flag")) {
-					if (
-						isMine(temp) &&
-						!$(this).hasClass("active") &&
-						!$(this).hasClass("mine")
-					) {
+				}
+				//chuột trái mở ô
+				else if (e.which === 1 && !$(this).hasClass("flag")) {
+					if (isMine(temp) && status != "lose") {
+						//chuyển class
 						$(this).removeClass("hidden");
 						$(this).addClass("mine");
-						flagList.splice(flagList.indexOf(temp), 1);
-						flagNum--;
+						// ko nhớ nhét vào đây làm gì, test sơ qua có vẻ k quan trọng
+						// flagList.splice(flagList.indexOf(temp), 1);
+						// flagNum--;
 						$("#bombremain").empty();
 						$("#bombremain").append(`Bombs remain: ${bombNum - 1}`);
 						revealAll();
 						status = "lose";
 						gameOver();
-						console.log("You lose");
+						console.log("You lose!");
 						return alert(`Game over!`);
 					} else reveal(temp);
 				}
@@ -98,14 +106,20 @@ $(function () {
 				if (isEqual(flagList, bombList)) {
 					if (!$(".tile").hasClass("hidden")) {
 						status = "win";
-						gameOver();
+						returnPoint();
+						// if (difi == "baby") {
+						// 	console.log("alo");
+						// 	return console.log(`Your point is: ${temp2}`);
+						// }
 						console.log(`Your score is: ${point}`);
+						gameOver();
 						return alert(`You win! Your score is: ${point}`);
 					}
 				}
 			}
 		});
 
+		//chưa viết
 		$(".tile").hover(
 			function () {
 				// over
@@ -196,6 +210,7 @@ $(function () {
 			map[i] = count;
 		}
 	}
+
 	function isZero(pos) {
 		if (map[pos] == 0) return 1;
 		else return 0;
@@ -209,6 +224,7 @@ $(function () {
 		if (temp == 0) return 0;
 		else return 1;
 	}
+
 	//check các hướng xem liệu có bom ở hướng ấy?
 	function isTopLeftMine(pos, e) {
 		if (pos % n != 0 && map[pos - n - 1] && e == pos - n - 1) return 1;
@@ -288,6 +304,7 @@ $(function () {
 		return a.join() == b.join();
 	}
 
+	//
 	function reveal(pos) {
 		//pos==id
 		if ($(`#${pos}`).hasClass("hidden")) {
@@ -299,14 +316,7 @@ $(function () {
 				revealAllNearbyZero(pos);
 				return;
 			}
-			if (map[pos] == 1) $(`#${pos}`).addClass("num-1 border-num");
-			if (map[pos] == 2) $(`#${pos}`).addClass("num-2 border-num");
-			if (map[pos] == 3) $(`#${pos}`).addClass("num-3 border-num");
-			if (map[pos] == 4) $(`#${pos}`).addClass("num-4 border-num");
-			if (map[pos] == 5) $(`#${pos}`).addClass("num-5 border-num");
-			if (map[pos] == 6) $(`#${pos}`).addClass("num-6 border-num");
-			if (map[pos] == 7) $(`#${pos}`).addClass("num-7 border-num");
-			if (map[pos] == 8) $(`#${pos}`).addClass("num-8 border-num");
+			$(`#${pos}`).addClass(`num-${map[pos]} border-num`);
 		}
 	}
 
@@ -341,10 +351,10 @@ $(function () {
 				bombNum = 3;
 				break;
 			case "easy":
-				// n = 3;
-				// bombNum = 1;
-				n = 10;
-				bombNum = 11;
+				n = 3;
+				bombNum = 1;
+				// n = 10;
+				// bombNum = 11;
 				break;
 			case "medium":
 				n = 17;
@@ -379,7 +389,8 @@ $(function () {
 	});
 	//main
 	function gameStart() {
-		timeStart = parseInt(new Date().getTime() / 1000);
+		if (difi == "baby") timeStart = new Date();
+		else timeStart = parseInt(new Date().getTime());
 		setintervalTemp = setInterval(returnPoint, 1000);
 	}
 	function gameOver() {
@@ -388,9 +399,11 @@ $(function () {
 		$("#test").empty().append("0");
 	}
 	function returnPoint() {
-		const d = parseInt(new Date().getTime() / 1000);
+		var d = parseInt(new Date().getTime());
 		point = d - timeStart;
 		console.log(point);
-		$("#test").empty().append(point);
+		$("#test")
+			.empty()
+			.append(parseInt(point / 1000));
 	}
 });
